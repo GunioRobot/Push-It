@@ -9,11 +9,11 @@ function TestClient(){ this.count = 0; this.sentMessages = []; };
 TestClient.prototype = {
   count: 0,
   sentMessages: [],
-  
+
   send: function(message){
     this.sentMessages.push(message);
   },
-  
+
   lastMessage: function(){
     return this.sentMessages[this.sentMessages.length - 1];
   }
@@ -69,11 +69,11 @@ test["connect with a valid message sends success"] = function(){
 
 test["custom filter should prevent connection"] = function(){
   var pi = new PushIt({}, { socket: {on: noop}});
-  
+
   pi.onConnectionRequest = function(agent){
     agent.connectionDenied("you stink!");
   };
-  
+
   var client = new TestClient();
 
   pi.__onMessage(client, connectionRequestMessage());
@@ -86,12 +86,12 @@ test["custom filter should prevent connection"] = function(){
 test["custom filter that does nothing should prevent connection"] = function(beforeExit){
   var pi = new PushIt({}, { socket: {on: noop}});
   var n = 0;
-  
+
   pi = shortenTimeouts(pi);
-  
+
   pi.onConnectionRequest = function(agent){
   };
-  
+
   var client = new TestClient();
 
   pi.__onMessage(client, connectionRequestMessage());
@@ -102,7 +102,7 @@ test["custom filter that does nothing should prevent connection"] = function(bef
     assert.equal(lm.successful, false);
     n++;
   }, 100);
-  
+
   beforeExit(function(){
     assert.equal(n, 1);
   });
@@ -124,7 +124,7 @@ test["subscribe with default function should return a success"] = function(){
 test["custom filter should prevent subscription"] = function(){
   var pi = new PushIt({}, { socket: {on: noop}});
   var client = new TestClient();
-  
+
   pi.onSubscriptionRequest = function(channel, agent){
     agent.subscriptionDenied(channel, "you stink!");
   };
@@ -171,11 +171,11 @@ test["require a channel to have a subscription"] = function(){
 test["custom filter that does nothing should prevent subscription"] = function( beforeExit){
   var pi = new PushIt({}, { socket: {on: noop}});
   var client = new TestClient();
-  
+
   var n = 0;
-  
+
   pi = shortenTimeouts(pi);
-  
+
   pi.onSubscriptionRequest = function(channel, agent){
   };
 
@@ -188,7 +188,7 @@ test["custom filter that does nothing should prevent subscription"] = function( 
     assert.equal(lm.successful, false);
     n++;
   }, 100);
-  
+
   beforeExit(function(){
     assert.equal(n, 1);
   });
@@ -201,9 +201,9 @@ test["custom filter that does nothing should prevent publication"] = function(be
   var client = new TestClient();
   var pubMsg = publicationRequestMessage();
   var n = 0;
-  
+
   pi = shortenTimeouts(pi);
-  
+
   pi.onPublicationRequest = function(channel, agent){
   };
 
@@ -215,7 +215,7 @@ test["custom filter that does nothing should prevent publication"] = function(be
     assert.equal(lm.channel, "/meta/error");
     n++;
   }, 100);
-  
+
   beforeExit(function(){
     assert.equal(n, 1);
   });
@@ -229,7 +229,7 @@ test["publishing should be successful by default"] = function(){
   pi.__onMessage(client, connectionRequestMessage());
   pi.__onMessage(client, subscriptionRequestMessage());
   pi.__onMessage(client, publicationRequestMessage());
-  
+
   var lm = client.lastMessage();
   assert.equal(lm.channel, "/meta/successful");
 };
@@ -262,7 +262,7 @@ test["publishing with deleted agent sends error"] = function(){
 
   pi.__onMessage(client, req);
   agent.remove(agentId);
-  
+
   pi.__onMessage(client, pub);
 
   assert.equal(client.lastMessage().channel, "/meta/error");
@@ -273,13 +273,13 @@ test["publishing with deleted agent sends error"] = function(){
 test["Pushing to an unknown meta should not break the server"] = function(){
   var pi = new PushIt({}, { socket: {on: noop}});
   var client = new TestClient();
-  
+
   var thrown = false;
 
   pi.__onMessage(client, connectionRequestMessage());
   pi.__onMessage(client, subscriptionRequestMessage());
   try{
-    pi.__onMessage(client, unknownMetaMethod());    
+    pi.__onMessage(client, unknownMetaMethod());
   }catch(e){
     thrown = true;
   }finally{

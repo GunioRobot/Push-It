@@ -14,13 +14,13 @@ proto.subscriptions = {};
 
 proto.subscribe = function(channel, agent){
   var self = this, chan = channel.name;
-    
+
   if(this.subscriptions[chan]){
     this.subscriptions[chan].addAgent(agent);
-  }else{  
+  }else{
     this.subscriptions[chan] = new SubscriptionSet();
     this.subscriptions[chan].addAgent(agent);
-    
+
     this.mq.subscribe(chan, function(message){
       self.received(chan, message);
     });
@@ -38,7 +38,7 @@ proto.received = function(chan, message){
 
 proto.unsubscribe = function(channel, agent){
   var chan = channel.name;
-  
+
   if(this.subscriptions[chan]){
     var countLeft = this.subscriptions[chan].removeAgent(agent);
     if(countLeft == 0){
@@ -57,7 +57,7 @@ SubscriptionSet.prototype = {
   count: 0,
   addAgent: function(agent){
     if(this.agents[agent.id]) return this.count;
-    
+
     this.agents[agent.id] = agent;
     this.count = this.count + 1;
     return this.count;

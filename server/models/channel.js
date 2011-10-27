@@ -3,7 +3,7 @@ var Channel = function(name, pushIt, onSubscriptionRequest, onPublicationRequest
   this.pushIt = pushIt;
   pushIt.channels[name] = this;
   this.onPublicationRequest = onPublicationRequest;
-  this.onSubscriptionRequest = onSubscriptionRequest; 
+  this.onSubscriptionRequest = onSubscriptionRequest;
 }
 
 Channel.prototype = {
@@ -15,7 +15,7 @@ Channel.prototype = {
   subscribe: function(agent){
     this.pushIt.subscribe( this, agent);
   },
-  
+
   publish: function(src){
     var msg = {};
     Object.keys(src).forEach(function (prop) { msg[prop] = src[prop] })

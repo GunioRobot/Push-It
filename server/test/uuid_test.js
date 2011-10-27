@@ -1,7 +1,7 @@
 var test = {},
     uuid = require("uuid-pure").newId,
     assert = require('assert');
-    
+
 module.exports = test;
 
 test["uuid should return only 0-9a-zA-Z\-_ so we can have url-safe uuids"] = function(){
@@ -26,7 +26,7 @@ test["uuid should be respect a 'base' param"] = function(){
   var guid = uuid(100, 36),
       validChars = guid.match(/[\dA-Z]/g).length,
       len = guid.length;
-  
+
   assert.equal(validChars, len, guid + " has "+validChars+" when it should have "+len );
 };
 

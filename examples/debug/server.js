@@ -6,12 +6,12 @@ var PushIt = require (__dirname + '/../../server/push-it').PushIt,
     sys = require('sys');
 
  try{
-   var options = JSON.parse(fs.readFileSync(__dirname+"/options.json"))  
+   var options = JSON.parse(fs.readFileSync(__dirname+"/options.json"))
  }catch(e){
    console.error("Could not load the options file!: ", e.toString());
    process.exit()
  }
- 
+
 
 function helloWorld(req, res) {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -19,7 +19,7 @@ function helloWorld(req, res) {
 }
 
 
-var server = connect.createServer( 
+var server = connect.createServer(
   connect.staticProvider(__dirname + '/static')
 );
 

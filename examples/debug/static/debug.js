@@ -1,15 +1,15 @@
 $(function() {
-  
+
   function onError(data){
     console.log("ERROR!");
     console.log(data);
   }
-  
+
   function onSuccess(data){
     console.log("SUCCESS CONFIRMATION RECEIVED");
     console.log(data);
   }
-  
+
 	window.pushIt = new PushIt({
 		channels: []
 	});
@@ -30,8 +30,8 @@ $(function() {
 
 		return false;
 	});
-	
-	
+
+
 	$(document).delegate('#subscribe', 'submit', function(event) {
 		event.preventDefault();
 
@@ -45,7 +45,7 @@ $(function() {
 
 		return false;
 	});
-	
+
 	pushIt.onMessageReceived = function(message){
 	 var li = $('<li/>');
 	 li.append('<span class="channel">'+message.channel+'</span> ');

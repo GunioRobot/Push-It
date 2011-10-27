@@ -6,7 +6,7 @@ var agents = {};
 
 function Agent(obj){
     if(!(this instanceof Agent)) return new Agent(obj);
-    
+
     this.id = obj.id;
     agents[obj.id] = this; // auto-save. TODO: garbage collect
     this.credentials = obj.credentials;
@@ -14,7 +14,7 @@ function Agent(obj){
 
     if(obj.client){
       this.client = obj.client;
-      obj.client.agentId = this.id;      
+      obj.client.agentId = this.id;
     }
 };
 
@@ -30,14 +30,14 @@ agent.remove = function(id) {
 
 agent.prototype.send = function(msg){
   if(this.client){
-    this.client.send(msg); //for now.  
+    this.client.send(msg); //for now.
   }
 };
 
 agent.prototype.connected = function(){
   clearTimeout(this.authenticationTimeout);
   this.isConnected = true;
-  
+
   this.send({
     "channel":"/meta/connect",
     "successful": true,
@@ -53,7 +53,7 @@ agent.prototype.connectionDenied = function(reason){
     "successful": false,
     "agentId":this.id,
     "error": reason
-  }); 
+  });
 };
 
 agent.prototype.requireConnection = function(timeout){
@@ -81,11 +81,11 @@ agent.prototype.subscriptionResponse = function(channel, successful, error){
   }else{
     name = channel.name;
   }
-  
+
   var request = this.subscriptionRequests[name];
   var message = request.message;
   clearTimeout(request.timeout);
-  
+
   message.successful = successful;
   message.error = error;
   this.send(message);
@@ -93,17 +93,17 @@ agent.prototype.subscriptionResponse = function(channel, successful, error){
 
 agent.prototype.requirePublication = function(timeout, message, channel){
   var self = this;
-  
+
   var name = message.uuid;
   this.publicationRequests || (this.publicationRequests = {});
 
   var request = {};
   request.message = message;
-  
+
   request.timeout = setTimeout(function(){
     self.publicationDenied(message, "Time expired before publication authorization could be established.");
   }, timeout);
-  
+
   this.publicationRequests[name] = request;
 };
 
@@ -118,10 +118,10 @@ agent.prototype.publicationDenied = function(message, reason){
 
 agent.prototype.publicationResponse = function(message, successful, error){
   error || (error = "");
-  
+
   var request = this.publicationRequests[message.uuid];
   var newMessage={};
-  
+
   clearTimeout(request.timeout);
   delete this.publicationRequests[message.uuid];
 
@@ -132,23 +132,23 @@ agent.prototype.publicationResponse = function(message, successful, error){
     newMessage.error = error;
   }
   newMessage.uuid = message.uuid;
-   
+
   this.send(newMessage);
 };
 
 agent.prototype.requireSubscription = function(timeout, message, channel){
   var self = this;
-  
+
   var name = channel.name;
   this.subscriptionRequests || (this.subscriptionRequests = {});
 
   var request = {};
   request.message = message;
-  
+
   request.timeout = setTimeout(function(){
     self.subscriptionDenied(channel, "Time expired before subscription authorization could be established.");
   }, timeout);
-  
+
   this.subscriptionRequests[name] = request;
 };
 

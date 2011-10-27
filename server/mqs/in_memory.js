@@ -34,7 +34,7 @@ proto.unsubscribe = function(chan){
     delete this.wildcardSubscriptions[chan];
   }else{
     delete this.exactSubscriptions[chan];
-  } 
+  }
 };
 
 //This takes a chan name, not a Channel object
@@ -44,10 +44,10 @@ proto.publish = function(chan, message){
   var subscriber = this.exactSubscriptions[chan];
   if(subscriber){
     process.nextTick(function(){
-      subscriber.callback(message);      
+      subscriber.callback(message);
     });
   }
-  
+
   var sub = {};
   var len = chan.length;
   for(var pattern in this.wildcardSubscriptions){

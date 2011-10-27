@@ -1,7 +1,7 @@
 var test = {},
     MQ = require('in_memory'),
     assert = require('assert');;
-    
+
 module.exports = test;
 
 test["a subscription without a * at the end should be considered exact"] = function(){
@@ -28,16 +28,16 @@ test["ensure unsubscribing for wildcards works as well"] = function(){
 test["subscribe to a channel glob to get messages matching your prefix"] = function(beforeExit){
   var mq = new MQ;
   var received = 0, n=0;
-  
+
   mq.subscribe("name*", function(){ received++; });
   mq.publish("namekins", "PANTALONES!");
-  
+
   setTimeout(function(){
     n++;
     assert.equal(received, 1);
   }, 20);
-  
+
   beforeExit(function(){
-    assert.equal(1, n, "Ensure that glob channel message sent timeout is called");      
+    assert.equal(1, n, "Ensure that glob channel message sent timeout is called");
   });
 };
